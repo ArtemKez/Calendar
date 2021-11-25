@@ -1,0 +1,83 @@
+.calendar {
+  position: relative;
+  display: flex;
+  width: 100%;
+  background-color: #006b6b;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.calendar > div {
+  padding: 40px 0 70px;
+  width: 50%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar > div:last-child {
+  background-color: white;
+}
+
+.block-color {
+  background-color: #009a9a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.day {
+  width: 40px;
+  height: 40px;
+  color: #bebebe;
+  font-weight: bold;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.red-letters > .day {
+  text-transform: uppercase;
+  color: #b7004c;
+}
+
+.week {
+  display: flex;
+}
+
+.current-date {
+  font-size: 1.4rem;
+  text-align: center;
+  text-transform: uppercase;
+  color: #009a9a;
+  font-weight: 600;
+}
+
+.selected {
+  box-sizing: border-box;
+  color: #b7004c;
+  border: 3px solid #b7004c;
+  border-radius: 50%;
+}
+
+.calendar-days {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.current-day-of-week {
+  text-transform: uppercase;
+  font-size: 1.4rem;
+  color: white;
+  font-weight: 100;
+}
+
+.current-day {
+  color: white;
+  font-size: 10rem;
+  font-weight: 100;
+}
