@@ -8,7 +8,7 @@ export default class Week extends Component {
 
     days() {
         return this.props.days.map((day, index) => {
-            return <Day number={day?.number} key={index} isSelected={day?.isSelected}/>
+            return <Day number={day?.number} key={day.key} isSelected={day?.isSelected}/>
         })
     }
 
