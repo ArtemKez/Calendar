@@ -1,7 +1,16 @@
+#root {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .calendar {
   position: relative;
   display: flex;
+  max-width: 960px;
   width: 100%;
+  min-width: 800px;
   background-color: #006b6b;
   padding: 10px;
   box-sizing: border-box;
@@ -49,11 +58,26 @@
 }
 
 .current-date {
+  width: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-size: 1.4rem;
   text-align: center;
   text-transform: uppercase;
   color: #009a9a;
   font-weight: 600;
+}
+
+.current-date > button {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  color: white;
+  font-weight: 900;
+  border-radius: 50%;
+  border: none;
+  background-color: #009a9a;
 }
 
 .selected {

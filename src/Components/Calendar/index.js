@@ -6,7 +6,11 @@ import startOfMonth from 'date-fns/startOfMonth'
 import addDays from 'date-fns/addDays'
 import subDays from 'date-fns/subDays'
 import isToday from 'date-fns/isToday'
+import setDate from 'date-fns/setDate'
 import WeekDays from "./Week/WeekDays";
+
+import subMonths from 'date-fns/subMonths'
+import addMonths from 'date-fns/addMonths'
 
 export default class Calendar extends Component {
     constructor(props) {
@@ -22,7 +26,7 @@ export default class Calendar extends Component {
 
     async componentDidMount() {
         await this.setState({
-            date: Date.now()
+            date: setDate(Date.now(), 1)
         })
         await this.getMonthInfo();
         await this.generateMonth();
@@ -35,168 +39,29 @@ export default class Calendar extends Component {
         await this.setState({monthInfo: {weeksCount, lastDay, firstDay}})
     }
 
-    monthDayNum(num) {
+    monthDayNum() {
+        let num = this.state && this.state.date && this.state.date && this.state.date.getMonth && this.state.date.getMonth() !== null
+            ? this.state.date.getMonth()
+            : (new Date()).getMonth();
         const arr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-        return arr[num % 12];
+
+        return arr[num];
     }
 
-    nextMonth = () => {
-        this.setState({})
+    nextMonth = async () => {
+        await this.setState({
+            date: addMonths(this.state.date, 1)
+        })
+        await this.getMonthInfo();
+        await this.generateMonth();
+
     }
-    prevMonth = () => {
-        this.setState({})
-    }
-    weeksArr = () => {
-        return [
-            [
-                {
-                    key: -3
-                },
-                {
-                    key: -2
-                },
-                {
-                    key: -1
-                },
-                {
-                    number: 1,
-                    key: 1
-                },
-                {
-                    number: 2,
-                    key: 2
-                },
-                {
-                    number: 3,
-                    key: 3
-                },
-                {
-                    number: 4,
-                    key: 4
-                },
-            ],
-            [
-                {
-                    number: 5,
-                    key: 5
-                },
-                {
-                    number: 6,
-                    key: 6
-                },
-                {
-                    number: 7,
-                    key: 7
-                },
-                {
-                    number: 8,
-                    key: 8
-                },
-                {
-                    number: 9,
-                    key: 9
-                },
-                {
-                    number: 10,
-                    key: 10
-                },
-                {
-                    number: 11,
-                    key: 11
-                },
-            ],
-            [
-                {
-                    number: 12,
-                    key: 12
-                },
-                {
-                    number: 13,
-                    key: 13
-                },
-                {
-                    number: 14,
-                    key: 14
-                },
-                {
-                    number: 15,
-                    key: 15
-                },
-                {
-                    number: 16,
-                    key: 16
-                },
-                {
-                    number: 17,
-                    key: 17
-                },
-                {
-                    number: 18,
-                    key: 18
-                },
-            ],
-            [
-                {
-                    number: 19,
-                    key: 19
-                },
-                {
-                    number: 20,
-                    key: 20
-                },
-                {
-                    number: 21,
-                    key: 21
-                },
-                {
-                    number: 22,
-                    key: 22
-                },
-                {
-                    number: 23,
-                    key: 23
-                },
-                {
-                    number: 24,
-                    key: 24
-                },
-                {
-                    number: 25,
-                    key: 25
-                },
-            ],
-            [
-                {
-                    number: 26,
-                    key: 26
-                },
-                {
-                    number: 27,
-                    key: 27
-                },
-                {
-                    number: 28,
-                    key: 28
-                },
-                {
-                    number: 29,
-                    key: 29
-                },
-                {
-                    number: 30,
-                    key: 30
-                },
-                {
-                    number: 31,
-                    isSelected: true,
-                    key: 31
-                },
-                {
-                    key: 32
-                }
-                // null
-            ],
-        ]
+    prevMonth = async () => {
+        await this.setState({
+            date: subMonths(this.state.date, 1)
+        })
+        await this.getMonthInfo();
+        await this.generateMonth();
     }
 
     weekDayByNum(num) {
@@ -237,7 +102,7 @@ export default class Calendar extends Component {
                 date = addDays(date, 1)
                 if (
                     (i === 0 && j >= firstDayIndex)
-                    || i > 0 && monthDay <= numberOfDaysInMonth
+                    || (i > 0 && monthDay <= numberOfDaysInMonth)
                 ) {
                     day.number = monthDay
                     monthDay++;
@@ -246,7 +111,6 @@ export default class Calendar extends Component {
             }
             month.push(week);
         }
-        console.log(month);
         this.setState({
             selectedMonth: month
         })
@@ -254,6 +118,10 @@ export default class Calendar extends Component {
 
     generateKey = (pre) => {
         return `${pre}_${new Date().getTime()}`;
+    }
+
+    fullYear() {
+        return (this.state && this.state.date && this.state.date.getFullYear && this.state.date.getFullYear()) || (new Date()).getFullYear();
     }
 
     render() {
@@ -265,16 +133,18 @@ export default class Calendar extends Component {
                         <div className={'current-day'}>{this.todayMonthDay()}</div>
                     </div>
                     <div>
-                        <div
-                            className={'current-date'}>{this.monthDayNum(new Date().getMonth())} {new Date().getFullYear()}</div>
+                        <div className={'current-date'}>
+                            <button onClick={this.prevMonth}>{'<'}</button>
+                            {this.monthDayNum()} {this.fullYear()}
+                            <button onClick={this.nextMonth}>{'>'}</button>
+                        </div>
                         <div className={'calendar-days'}>
                             <WeekDays/>
                             {this.weeks()}
                         </div>
                     </div>
                 </div>
-                <button onClick={this.generateMonth}>OtherMonth</button>
             </>
-        )
+        );
     }
 }
