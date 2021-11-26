@@ -4,6 +4,8 @@ import getWeeksInMonth from 'date-fns/getWeeksInMonth'
 import lastDayOfMonth from 'date-fns/lastDayOfMonth'
 import startOfMonth from 'date-fns/startOfMonth'
 import addDays from 'date-fns/addDays'
+import subDays from 'date-fns/subDays'
+import isToday from 'date-fns/isToday'
 import WeekDays from "./Week/WeekDays";
 
 export default class Calendar extends Component {
@@ -14,7 +16,7 @@ export default class Calendar extends Component {
             monthInfo: {},
             weeks: {},
             today: new Date(),
-            selectedMonth: this.weeksArr()
+            selectedMonth: []
         }
     }
 
@@ -22,7 +24,8 @@ export default class Calendar extends Component {
         await this.setState({
             date: Date.now()
         })
-        await this.getMonthInfo()
+        await this.getMonthInfo();
+        await this.generateMonth();
     }
 
     async getMonthInfo() {
@@ -220,15 +223,15 @@ export default class Calendar extends Component {
         const monthInfo = this.state.monthInfo;
         const firstDayIndex = monthInfo.firstDay.getDay();
         const numberOfDaysInMonth = monthInfo.lastDay.getDate();
-        let date = addDays(this.state.monthInfo.firstDay, 7 - firstDayIndex);
+        let date = subDays(this.state.monthInfo.firstDay, firstDayIndex);
         let monthDay = 1
-        console.log('numberOfDaysInMonth', {numberOfDaysInMonth, firstDayIndex});
+
         for (let i = 0; i < this.state.monthInfo.weeksCount; i++) {
             const week = (new Array(7)).fill(null);
             for (let j = 0; j < 7; j++) {
                 const day = {
                     number: null,
-                    isSelected: false,
+                    isSelected: isToday(date),
                     key: date.getTime()
                 }
                 date = addDays(date, 1)
@@ -240,9 +243,6 @@ export default class Calendar extends Component {
                     monthDay++;
                 }
                 week[j] = day;
-                if (false) {
-                    // TODO: check day selected
-                }
             }
             month.push(week);
         }
